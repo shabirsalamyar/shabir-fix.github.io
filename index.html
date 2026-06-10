@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShabirFix – Telecommunications Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --void:#020c18; --deep:#04111f; --navy:#071a2e; --panel:#0b2035;
+  --surface:#0e2840; --border:#153450; --signal:#00e5ff; --pulse:#0090ff;
+  --live:#00ff88; --warn:#ff6b2b; --white:#e8f4ff; --muted:#5a8aac; --text:#b8d8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--void);color:var(--text);overflow-x:hidden}
+
+/* ─── GATE ─── */
+#gate{position:fixed;inset:0;z-index:9999;background:var(--void);display:flex;align-items:center;justify-content:center;flex-direction:column}
+.gate-box{border:1px solid var(--border);background:var(--panel);border-radius:18px;padding:48px 40px;max-width:440px;width:92%;text-align:center;box-shadow:0 0 80px #00e5ff18}
+.gate-logo{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:var(--signal);letter-spacing:.12em;margin-bottom:4px}
+.gate-logo span{color:var(--white)}
+.gate-sub{font-size:11px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:32px}
+.gate-scan{width:90px;height:90px;border-radius:50%;border:2px solid var(--border);margin:0 auto 26px;position:relative;display:flex;align-items:center;justify-content:center}
+.gate-scan::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid transparent;border-top-color:var(--signal);animation:spin 1.2s linear infinite}
+.gate-scan::after{content:'';position:absolute;inset:-13px;border-radius:50%;border:1px solid transparent;border-top-color:var(--pulse);animation:spin 2s linear infinite reverse}
+.gate-scan i{font-size:32px;color:var(--signal)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gate-title{font-size:20px;font-weight:600;color:var(--white);margin-bottom:10px}
+.gate-desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:26px}
+.gate-check{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;cursor:pointer;transition:all .3s;margin-bottom:18px;user-select:none}
+.gate-check:hover{border-color:var(--signal)}
+.gate-check.verified{border-color:var(--live);background:#00ff8810}
+.check-box{width:26px;height:26px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
+.gate-check.verified .check-box{background:var(--live);border-color:var(--live)}
+.check-box i{color:#000;font-size:13px;display:none}
+.gate-check.verified .check-box i{display:block}
+.check-label{font-size:14px;color:var(--text);font-weight:500}
+.gate-check.verified .check-label{color:var(--live)}
+.gate-progress{width:100%;height:3px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:18px;display:none}
+.gate-progress-bar{height:100%;background:linear-gradient(90deg,var(--pulse),var(--signal));width:0%;transition:width .05s}
+.gate-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--pulse),var(--signal));border:none;border-radius:10px;color:#000;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;letter-spacing:.1em;cursor:pointer;display:none;transition:all .2s}
+.gate-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px #00e5ff44}
+.gate-hint{font-size:11px;color:var(--muted);margin-top:14px}
+
+/* ─── NATURE WAVE CANVAS ─── */
+#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:70px;background:rgba(2,12,24,.88);backdrop-filter:blur(20px);border-bottom:1px solid #15345055;transition:all .3s}
+nav.scrolled{height:58px;background:rgba(2,12,24,.97)}
+.nav-logo{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--signal);letter-spacing:.1em;text-decoration:none}
+.nav-logo span{color:var(--white)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--signal);transform:scaleX(0);transition:transform .3s}
+.nav-links a:hover{color:var(--signal)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-cta{padding:8px 22px;background:transparent;border:1px solid var(--signal);border-radius:6px;color:var(--signal);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:.1em;cursor:pointer;text-decoration:none;transition:all .2s}
+.nav-cta:hover{background:var(--signal);color:#000}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.nav-hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.mobile-menu{position:fixed;top:70px;left:0;right:0;z-index:99;background:rgba(4,17,31,.98);border-bottom:1px solid var(--border);padding:20px 32px;display:none;flex-direction:column;gap:18px;backdrop-filter:blur(20px)}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:16px;font-weight:500;color:var(--text);text-decoration:none;letter-spacing:.06em}
+
+/* ─── HERO ─── */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:120px 48px 80px;text-align:center;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid var(--border);border-radius:50px;font-size:11px;font-weight:600;color:var(--signal);letter-spacing:.15em;text-transform:uppercase;margin-bottom:28px;background:#00e5ff0a}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--live);box-shadow:0 0 6px var(--live);animation:livepulse 1.5s infinite}
+@keyframes livepulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.hero-name{font-family:'Rajdhani',sans-serif;font-size:clamp(52px,9vw,110px);font-weight:700;line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:8px}
+.hero-name .accent{color:var(--signal)}
+.hero-title{font-family:'JetBrains Mono',monospace;font-size:clamp(13px,2vw,17px);color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px}
+.cursor-blink{display:inline-block;width:2px;height:1em;background:var(--signal);vertical-align:middle;animation:blink .8s infinite;margin-left:3px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.hero-desc{font-size:16px;color:var(--muted);max-width:520px;margin:0 auto 44px;line-height:1.8}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-primary{padding:14px 32px;background:linear-gradient(135deg,#0060cc,var(--signal));border:none;border-radius:8px;color:#000;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:.1em;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .25s}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 40px #00e5ff33}
+.btn-outline{padding:14px 32px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;letter-spacing:.1em;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .25s}
+.btn-outline:hover{border-color:var(--signal);color:var(--signal);transform:translateY(-3px)}
+
+/* ─── STATS ─── */
+.stats-strip{position:relative;z-index:1;display:flex;justify-content:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(11,32,53,.7);backdrop-filter:blur(10px);flex-wrap:wrap}
+.stat-item{flex:1;min-width:140px;max-width:200px;padding:28px 24px;text-align:center;border-right:1px solid var(--border)}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:'Rajdhani',sans-serif;font-size:36px;font-weight:700;color:var(--signal);line-height:1;margin-bottom:4px}
+.stat-label{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+
+/* ─── SHARED SECTION ─── */
+section{position:relative;z-index:1}
+.section-inner{max-width:1100px;margin:0 auto;padding:100px 48px}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--signal);letter-spacing:.25em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.section-eyebrow::after{content:'';display:block;height:1px;width:40px;background:var(--signal);opacity:.5}
+.section-title{font-family:'Rajdhani',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:700;color:var(--white);line-height:1.1;margin-bottom:16px}
+.section-desc{font-size:15px;color:var(--muted);max-width:540px;line-height:1.8;margin-bottom:56px}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ─── SERVICES ─── */
+#services{background:var(--deep)}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.service-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:32px 28px;transition:all .3s;position:relative;overflow:hidden;cursor:pointer}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--signal),transparent);opacity:0;transition:opacity .3s}
+.service-card:hover{transform:translateY(-6px);border-color:#1a6a9a;box-shadow:0 24px 60px #00e5ff18}
+.service-card:hover::before{opacity:1}
+.service-icon{width:52px;height:52px;background:linear-gradient(135deg,#00264a,#003d70);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--signal);margin-bottom:20px;border:1px solid var(--border)}
+.service-name{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:10px}
+.service-desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+.service-tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{padding:4px 10px;background:#00264a;border:1px solid var(--border);border-radius:50px;font-size:10px;font-weight:600;color:var(--signal);letter-spacing:.08em}
+.service-cta{margin-top:18px;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--signal);letter-spacing:.08em}
+
+/* ─── SERVICE MODAL ─── */
+.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(2,12,24,.95);backdrop-filter:blur(12px);display:none;align-items:flex-start;justify-content:center;padding:60px 20px 40px;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--panel);border:1px solid var(--border);border-radius:20px;max-width:820px;width:100%;position:relative;overflow:hidden;box-shadow:0 40px 100px #000a}
+.modal-header{padding:36px 40px 24px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.modal-icon{width:64px;height:64px;background:linear-gradient(135deg,#00264a,#003d70);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--signal);border:1px solid var(--border);flex-shrink:0}
+.modal-title-wrap{flex:1}
+.modal-title{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--white);line-height:1.1;margin-bottom:6px}
+.modal-subtitle{font-size:13px;color:var(--muted)}
+.modal-close{width:38px;height:38px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.modal-close:hover{border-color:var(--warn);color:var(--warn)}
+.modal-body{padding:32px 40px}
+.modal-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px}
+.modal-photo{aspect-ratio:16/10;border-radius:10px;overflow:hidden;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:36px;position:relative}
+.modal-photo canvas{position:absolute;inset:0;width:100%;height:100%}
+.modal-section-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.modal-section-title i{color:var(--signal);font-size:16px}
+.modal-desc{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:28px}
+.modal-pricing{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;transition:border-color .2s;position:relative}
+.price-card.featured{border-color:var(--signal)}
+.price-card.featured::before{content:'POPULAR';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--signal);color:#000;font-size:9px;font-weight:700;padding:3px 10px;border-radius:50px;letter-spacing:.1em}
+.price-tier{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px}
+.price-amount{font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:var(--signal);line-height:1;margin-bottom:4px}
+.price-unit{font-size:11px;color:var(--muted)}
+.price-features{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:6px}
+.price-features li{font-size:12px;color:var(--text);display:flex;align-items:center;gap:6px}
+.price-features li::before{content:'✓';color:var(--live);font-weight:700}
+.modal-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.modal-step{display:flex;align-items:flex-start;gap:14px;padding:14px;background:var(--surface);border-radius:10px;border:1px solid var(--border)}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--signal);color:#000;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-text{font-size:13px;color:var(--text);line-height:1.6}
+.step-text strong{color:var(--white)}
+.modal-cta{display:flex;gap:12px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--border)}
+
+/* ─── ABOUT ─── */
+#about{background:var(--void)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.about-frame{width:100%;aspect-ratio:1;background:var(--panel);border:1px solid var(--border);border-radius:20px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.about-frame::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#00e5ff08,transparent 70%)}
+.radar{width:260px;height:260px;position:relative;display:flex;align-items:center;justify-content:center}
+.radar-ring{position:absolute;border-radius:50%;border:1px solid #1a3a5c}
+.radar-ring:nth-child(1){width:100%;height:100%}
+.radar-ring:nth-child(2){width:70%;height:70%}
+.radar-ring:nth-child(3){width:40%;height:40%}
+.radar-sweep{position:absolute;inset:0;animation:radarSweep 3s linear infinite}
+.radar-sweep::before{content:'';position:absolute;top:50%;left:50%;width:50%;height:2px;transform-origin:left center;background:linear-gradient(90deg,transparent,var(--signal))}
+.radar-sweep::after{content:'';position:absolute;top:0;left:50%;width:50%;height:100%;background:conic-gradient(from 0deg,transparent 270deg,#00e5ff22 360deg);transform-origin:left center;border-radius:0 50% 50% 0}
+@keyframes radarSweep{to{transform:rotate(360deg)}}
+.radar-blip{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 12px var(--live);animation:blipPulse 2s infinite}
+@keyframes blipPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.5)}}
+.radar-center{width:12px;height:12px;border-radius:50%;background:var(--signal);box-shadow:0 0 16px var(--signal);z-index:2}
+.about-tags-float{position:absolute;top:20px;right:-20px;display:flex;flex-direction:column;gap:8px}
+.float-tag{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--signal);font-family:'JetBrains Mono',monospace;white-space:nowrap;animation:floatTag 3s ease-in-out infinite}
+.float-tag:nth-child(2){animation-delay:.8s}
+.float-tag:nth-child(3){animation-delay:1.6s}
+@keyframes floatTag{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.skill-bar-group{display:flex;flex-direction:column;gap:14px;margin-top:32px}
+.skill-bar-label{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text);letter-spacing:.05em;margin-bottom:6px}
+.skill-bar-track{height:5px;background:var(--border);border-radius:10px;overflow:hidden}
+.skill-bar-fill{height:100%;background:linear-gradient(90deg,var(--pulse),var(--signal));border-radius:10px;width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+
+/* ─── PORTFOLIO ─── */
+#portfolio{background:var(--deep)}
+.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px}
+.project-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .3s;cursor:pointer}
+.project-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px #00051a;border-color:#1a6a9a}
+.project-header{padding:22px 22px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.project-type{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--signal);background:#00264a;padding:4px 10px;border-radius:50px;border:1px solid var(--border)}
+.project-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--live);font-weight:600}
+.project-status .dot{width:5px;height:5px;border-radius:50%;background:var(--live)}
+.project-visual{margin:14px 22px;height:110px;background:var(--surface);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:40px;border:1px solid var(--border);position:relative;overflow:hidden}
+.project-visual::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 20px,#00e5ff06 20px,#00e5ff06 21px)}
+.project-body{padding:0 22px 22px}
+.project-name{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;color:var(--white);margin-bottom:7px}
+.project-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.project-tech{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ─── CONTACT ─── */
+#contact{background:var(--void)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:60px}
+.contact-item{display:flex;gap:16px;align-items:flex-start;margin-bottom:26px}
+.contact-icon{width:44px;height:44px;background:var(--panel);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--signal);font-size:17px;flex-shrink:0}
+.contact-label{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.contact-value{font-size:14px;color:var(--text);font-weight:500}
+.contact-form{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:36px}
+.form-label{display:block;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.form-input,.form-textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:13px 16px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:16px}
+.form-input:focus,.form-textarea:focus{border-color:var(--signal);box-shadow:0 0 0 3px #00e5ff12}
+.form-textarea{resize:vertical;min-height:110px;line-height:1.6}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.social-links-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.social-link{width:42px;height:42px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:17px;text-decoration:none;transition:all .2s}
+.social-link:hover{border-color:var(--signal);color:var(--signal);background:#00e5ff0a}
+.social-link.facebook:hover{border-color:#1877f2;color:#1877f2}
+.social-link.linkedin:hover{border-color:#0077b5;color:#0077b5}
+.social-link.twitter:hover{border-color:#1da1f2;color:#1da1f2}
+.social-link.email:hover{border-color:var(--live);color:var(--live)}
+
+/* ─── FOOTER ─── */
+footer{background:var(--deep);border-top:1px solid var(--border);padding:48px 48px 28px;position:relative;z-index:1}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand-name{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--signal);letter-spacing:.1em;margin-bottom:12px}
+.footer-brand-desc{font-size:13px;color:var(--muted);line-height:1.7}
+.footer-col-title{font-size:12px;font-weight:700;color:var(--white);letter-spacing:.15em;text-transform:uppercase;margin-bottom:18px}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--signal)}
+.footer-bottom{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:24px;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:12px}
+
+/* ─── ADMIN ─── */
+#adminLogin{position:fixed;inset:0;z-index:1000;background:rgba(2,12,24,.97);display:none;align-items:center;justify-content:center}
+#adminLogin.open{display:flex}
+.login-box{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:48px 40px;width:380px;box-shadow:0 0 80px #00e5ff15}
+.login-title{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:var(--white);margin-bottom:6px}
+.login-sub{font-size:12px;color:var(--muted);margin-bottom:32px}
+.login-error{font-size:12px;color:var(--warn);margin-top:10px;display:none}
+#adminPanel{position:fixed;inset:0;z-index:500;background:rgba(2,12,24,.99);display:none;overflow-y:auto}
+#adminPanel.open{display:block}
+.admin-header{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:1px solid var(--border);background:var(--panel);position:sticky;top:0;z-index:10}
+.admin-logo{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--signal);letter-spacing:.1em}
+.admin-close{width:36px;height:36px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.admin-close:hover{border-color:var(--warn);color:var(--warn)}
+.admin-body{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 65px)}
+.admin-sidebar{background:var(--deep);border-right:1px solid var(--border);padding:24px 0}
+.admin-menu-item{display:flex;align-items:center;gap:12px;padding:13px 24px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;border-left:3px solid transparent}
+.admin-menu-item:hover{color:var(--text);background:#0a1628}
+.admin-menu-item.active{color:var(--signal);background:#00264a33;border-left-color:var(--signal)}
+.admin-menu-item i{width:18px;text-align:center}
+.admin-content{padding:36px 48px}
+.admin-section{display:none}
+.admin-section.active{display:block}
+.admin-section-title{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:var(--white);margin-bottom:6px}
+.admin-section-sub{font-size:13px;color:var(--muted);margin-bottom:32px}
+.admin-cards-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:32px}
+.admin-stat-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px}
+.admin-stat-card .num{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--signal)}
+.admin-stat-card .lbl{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+.admin-table{width:100%;border-collapse:collapse;background:var(--panel);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.admin-table th{background:var(--surface);padding:12px 18px;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;text-align:left;border-bottom:1px solid var(--border)}
+.admin-table td{padding:13px 18px;font-size:13px;color:var(--text);border-bottom:1px solid #0b203530;vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:#00264a20}
+.badge{padding:3px 10px;border-radius:50px;font-size:10px;font-weight:700;letter-spacing:.08em}
+.badge-green{background:#00ff8820;color:var(--live);border:1px solid #00ff8840}
+.badge-blue{background:#00264a;color:var(--signal);border:1px solid var(--border)}
+.badge-orange{background:#ff6b2b20;color:var(--warn);border:1px solid #ff6b2b40}
+.admin-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.admin-input-group{display:flex;flex-direction:column;gap:6px}
+.admin-input-group label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.admin-input{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.admin-input:focus{border-color:var(--signal)}
+.admin-textarea{resize:vertical;min-height:80px}
+.admin-btn{padding:11px 22px;border:none;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.admin-btn-primary{background:linear-gradient(135deg,var(--pulse),var(--signal));color:#000}
+.admin-btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px #00e5ff33}
+.admin-btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.admin-btn-ghost:hover{border-color:var(--signal);color:var(--signal)}
+.admin-btn-danger{background:#ff4757;color:#fff}
+.admin-btn-row{display:flex;gap:10px;margin-top:18px}
+.admin-card-box{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px}
+.admin-card-box-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:20px}
+
+/* ─── TOAST ─── */
+#toast{position:fixed;bottom:28px;right:28px;z-index:9999;background:var(--panel);border:1px solid var(--signal);border-radius:10px;padding:14px 20px;font-size:13px;color:var(--text);box-shadow:0 8px 40px #00e5ff22;transform:translateY(20px);opacity:0;transition:all .35s;display:flex;align-items:center;gap:10px}
+#toast.show{transform:translateY(0);opacity:1}
+#toast i{color:var(--live)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  nav{padding:0 24px}
+  .nav-links,.nav-cta{display:none}
+  .nav-hamburger{display:flex}
+  .section-inner{padding:70px 24px}
+  .about-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+  .about-tags-float{display:none}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:32px}
+  .admin-body{grid-template-columns:1fr}
+  .admin-sidebar{display:none}
+  .form-row{grid-template-columns:1fr}
+  .modal-photos{grid-template-columns:repeat(2,1fr)}
+  .modal-body{padding:24px 22px}
+  .modal-header{padding:24px 22px 18px}
+}
+@media(max-width:600px){
+  .footer-inner{grid-template-columns:1fr}
+  .admin-content{padding:20px 16px}
+  .admin-form-grid{grid-template-columns:1fr}
+  .modal-photos{grid-template-columns:1fr}
+  .modal-pricing{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ BOT GATE ═══════════════════ -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-logo">SHABIR<span>FIX</span></div>
+    <div class="gate-sub">Telecommunications Engineering · Afghanistan</div>
+    <div class="gate-scan"><i class="fas fa-satellite-dish"></i></div>
+    <div class="gate-title">Security Verification</div>
+    <div class="gate-desc">Scanning your connection to confirm you're a real visitor. This takes just a second.</div>
+    <div class="gate-check" id="gateCheck" onclick="startVerify()">
+      <div class="check-box"><i class="fas fa-check"></i></div>
+      <span class="check-label">I'm not a robot</span>
+    </div>
+    <div class="gate-progress" id="gateProgress"><div class="gate-progress-bar" id="gateBar"></div></div>
+    <button class="gate-btn" id="gateBtn" onclick="enterSite()">Enter ShabirFix →</button>
+    <div class="gate-hint">🔒 Protected · Your connection is encrypted</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ BG CANVAS ═══════════════════ -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">SHABIR<span>FIX</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire Me</a>
+  <button class="nav-hamburger" onclick="toggleMobile()" id="hamburger">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#portfolio" onclick="closeMobile()">Portfolio</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+  <a href="#" onclick="openAdminLogin();closeMobile();" style="color:var(--signal)">⚙ Admin</a>
+</div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section id="hero">
+  <div class="hero-badge"><span class="live-dot"></span>Available for Projects · Afghanistan</div>
+  <h1 class="hero-name">SHABIR<br><span class="accent">FIX</span></h1>
+  <div class="hero-title">Telecommunications Engineer<span class="cursor-blink"></span></div>
+  <p class="hero-desc">Diagnosing, designing, and deploying telecom infrastructure — fiber optics, RF systems, 5G/LTE, and network architecture. Quality signals, every time.</p>
+  <div class="hero-btns">
+    <a href="#services" class="btn-primary"><i class="fas fa-bolt"></i> View Services</a>
+    <a href="#contact" class="btn-outline"><i class="fas fa-paper-plane"></i> Get in Touch</a>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-strip">
+  <div class="stat-item reveal"><div class="stat-num" data-count="200">0</div><div class="stat-label">Projects Completed</div></div>
+  <div class="stat-item reveal"><div class="stat-num" data-count="8">0</div><div class="stat-label">Years Experience</div></div>
+  <div class="stat-item reveal"><div class="stat-num" data-count="50">0</div><div class="stat-label">Happy Clients</div></div>
+  <div class="stat-item reveal"><div class="stat-num" data-count="99">0</div><div class="stat-label">% Uptime Record</div></div>
+</div>
+
+<!-- ═══════════════════ SERVICES ═══════════════════ -->
+<section id="services">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">What I Do</div>
+    <h2 class="section-title reveal">Expert Telecom<br>Engineering Services</h2>
+    <p class="section-desc reveal">Click any service card to see full details, photos, pricing, and how the process works.</p>
+    <div class="services-grid" id="servicesGrid"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ SERVICE MODAL ═══════════════════ -->
+<div class="modal-overlay" id="serviceModal" onclick="closeModalOutside(event)">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-header">
+      <div class="modal-icon" id="mIcon"></div>
+      <div class="modal-title-wrap">
+        <div class="modal-title" id="mTitle"></div>
+        <div class="modal-subtitle" id="mSub"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ ABOUT ═══════════════════ -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div style="position:relative;" class="reveal">
+        <div class="about-frame">
+          <div class="radar">
+            <div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-ring"></div>
+            <div class="radar-sweep"></div>
+            <div class="radar-blip" style="top:28%;left:62%;"></div>
+            <div class="radar-blip" style="top:55%;left:30%;animation-delay:.5s;"></div>
+            <div class="radar-blip" style="top:70%;left:65%;animation-delay:1s;"></div>
+            <div class="radar-center"></div>
+          </div>
+        </div>
+        <div class="about-tags-float">
+          <div class="float-tag">📡 5G / LTE</div>
+          <div class="float-tag">🔌 Fiber Optic</div>
+          <div class="float-tag">📶 RF Design</div>
+        </div>
+      </div>
+      <div>
+        <div class="section-eyebrow reveal">About Me</div>
+        <h2 class="section-title reveal">Signal Engineer.<br>Problem Solver.</h2>
+        <p style="font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:18px;" class="reveal">I'm Shabir — a telecommunications engineer based in Afghanistan with deep expertise in network infrastructure, signal diagnostics, and wireless system design. I work across residential, commercial, and carrier-grade deployments.</p>
+        <p style="font-size:15px;color:var(--muted);line-height:1.8;" class="reveal">Whether you need a fiber splice, a dead zone eliminated, a 5G tower commissioned, or a complete telecom overhaul — I bring precision, speed, and professionalism to every job.</p>
+        <div class="skill-bar-group reveal" id="skillBars"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PORTFOLIO ═══════════════════ -->
+<section id="portfolio">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Past Work</div>
+    <h2 class="section-title reveal">Selected Projects</h2>
+    <p class="section-desc reveal">Real deployments, real results — across Afghanistan and beyond.</p>
+    <div class="portfolio-grid" id="portfolioGrid"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTACT ═══════════════════ -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Get In Touch</div>
+    <h2 class="section-title reveal">Let's Work Together</h2>
+    <p class="section-desc reveal">Have a telecom project? Signal problem? Network issue? Let's talk and get it fixed.</p>
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-phone"></i></div>
+          <div><div class="contact-label">Phone / WhatsApp</div><div class="contact-value">+93 771 492 760</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+          <div><div class="contact-label">Email</div><div class="contact-value">shabir.salamyar@gmail.com</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div><div class="contact-label">Location</div><div class="contact-value">Afghanistan</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-clock"></i></div>
+          <div><div class="contact-label">Response Time</div><div class="contact-value">Within 24 hours</div></div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:14px;">Follow & Connect</div>
+          <div class="social-links-row">
+            <a href="https://facebook.com/ShabirSalamyar" target="_blank" class="social-link facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://linkedin.com/in/ShabirSalamyar" target="_blank" class="social-link linkedin" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://x.com/ShabirSalamyar" target="_blank" class="social-link twitter" title="X / Twitter"><i class="fab fa-x-twitter"></i></a>
+            <a href="mailto:shabir.salamyar@gmail.com" class="social-link email" title="Email"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="contact-form">
+          <div class="form-row">
+            <div><label class="form-label">Your Name</label><input class="form-input" placeholder="Full name" id="fName"></div>
+            <div><label class="form-label">Email</label><input class="form-input" placeholder="you@email.com" id="fEmail"></div>
+          </div>
+          <label class="form-label">Service Needed</label>
+          <select class="form-input" id="fService">
+            <option value="">Select a service…</option>
+            <option>Fiber Optic Installation</option>
+            <option>Network Troubleshooting</option>
+            <option>RF / Antenna Design</option>
+            <option>5G / LTE Deployment</option>
+            <option>Cable Fault Repair</option>
+            <option>CCTV / Security Systems</option>
+            <option>Structured Cabling</option>
+            <option>Other</option>
+          </select>
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" placeholder="Describe your project or issue in detail…" id="fMessage"></textarea>
+          <button class="btn-primary" style="width:100%;justify-content:center;" onclick="submitForm()"><i class="fas fa-paper-plane"></i> Send Message</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">SHABIRFIX</div>
+      <p class="footer-brand-desc">Professional telecommunications engineering from Afghanistan. Fiber, RF, 5G, networking, and signal solutions — delivered right.</p>
+      <div style="display:flex;gap:10px;margin-top:20px;">
+        <a href="https://facebook.com/ShabirSalamyar" target="_blank" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://linkedin.com/in/ShabirSalamyar" target="_blank" class="social-link linkedin"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://x.com/ShabirSalamyar" target="_blank" class="social-link twitter"><i class="fab fa-x-twitter"></i></a>
+        <a href="mailto:shabir.salamyar@gmail.com" class="social-link email"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Services</div>
+      <ul class="footer-links">
+        <li><a href="#services">Fiber Optic</a></li>
+        <li><a href="#services">RF & Antennas</a></li>
+        <li><a href="#services">5G / LTE</a></li>
+        <li><a href="#services">Network Design</a></li>
+        <li><a href="#services">Fault Repair</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigation</div>
+      <ul class="footer-links">
+        <li><a href="#about">About Shabir</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#" onclick="openAdminLogin()">Admin Panel</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <ul class="footer-links">
+        <li><a href="tel:+93771492760">+93 771 492 760</a></li>
+        <li><a href="mailto:shabir.salamyar@gmail.com">shabir.salamyar@gmail.com</a></li>
+        <li><a href="#">Afghanistan</a></li>
+        <li><a href="#">Response: 24h</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 ShabirFix.com · All rights reserved</span>
+    <span style="color:var(--signal);">Built with precision ⚡ Afghanistan</span>
+  </div>
+</footer>
+
+<!-- ═══════════════════ ADMIN LOGIN ═══════════════════ -->
+<div id="adminLogin">
+  <div class="login-box">
+    <div class="login-title">⚙ Admin Access</div>
+    <div class="login-sub">ShabirFix Dashboard · Authorized personnel only</div>
+    <div style="margin-bottom:14px;"><label class="form-label">Username</label><input type="text" class="form-input" id="loginUser" placeholder="admin" autocomplete="off" style="margin-bottom:0"></div>
+    <div style="margin-bottom:4px;"><label class="form-label">Password</label><input type="password" class="form-input" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" style="margin-bottom:0"></div>
+    <div class="login-error" id="loginError">⚠ Wrong credentials. Try again.</div>
+    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:16px;" onclick="doLogin()"><i class="fas fa-lock-open"></i> Login</button>
+    <button onclick="closeAdminLogin()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;width:100%;margin-top:14px;">✕ Cancel</button>
+    <div style="font-size:11px;color:var(--muted);margin-top:12px;text-align:center;opacity:.6;">Default: admin / shabir2024</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ ADMIN PANEL ═══════════════════ -->
+<div id="adminPanel">
+  <div class="admin-header">
+    <div class="admin-logo">⚙ SHABIRFIX ADMIN</div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--live);display:inline-block;box-shadow:0 0 8px var(--live);"></span>
+        Shabir Salamyar
+      </span>
+      <button class="admin-close" onclick="closeAdmin()"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+  <div class="admin-body">
+    <div class="admin-sidebar">
+      <div class="admin-menu-item active" onclick="adminTab('dashboard',this)"><i class="fas fa-tachometer-alt"></i> Dashboard</div>
+      <div class="admin-menu-item" onclick="adminTab('services',this)"><i class="fas fa-tools"></i> Services</div>
+      <div class="admin-menu-item" onclick="adminTab('portfolio',this)"><i class="fas fa-briefcase"></i> Portfolio</div>
+      <div class="admin-menu-item" onclick="adminTab('messages',this)"><i class="fas fa-envelope"></i> Messages</div>
+      <div class="admin-menu-item" onclick="adminTab('skills',this)"><i class="fas fa-chart-bar"></i> Skills</div>
+      <div class="admin-menu-item" onclick="adminTab('settings',this)"><i class="fas fa-cog"></i> Settings</div>
+    </div>
+    <div class="admin-content">
+
+      <!-- DASHBOARD -->
+      <div class="admin-section active" id="atab-dashboard">
+        <div class="admin-section-title">Dashboard</div>
+        <div class="admin-section-sub">Welcome back, Shabir. Manage every part of your website here.</div>
+        <div class="admin-cards-row">
+          <div class="admin-stat-card"><div class="num" id="adS">6</div><div class="lbl">Services</div></div>
+          <div class="admin-stat-card"><div class="num" id="adP">4</div><div class="lbl">Projects</div></div>
+          <div class="admin-stat-card"><div class="num" id="adM">0</div><div class="lbl">Messages</div></div>
+          <div class="admin-stat-card"><div class="num" style="color:var(--live)">Live</div><div class="lbl">Site Status</div></div>
+        </div>
+        <div style="background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px;font-size:13px;color:var(--muted);line-height:1.9;">
+          <strong style="color:var(--signal);">How to use this panel:</strong><br>
+          → <strong style="color:var(--white)">Services</strong> — Add, edit, or remove service cards on the homepage<br>
+          → <strong style="color:var(--white)">Portfolio</strong> — Add completed project case studies<br>
+          → <strong style="color:var(--white)">Messages</strong> — Read contact form submissions from clients<br>
+          → <strong style="color:var(--white)">Skills</strong> — Update the skill bars in your About section<br>
+          → <strong style="color:var(--white)">Settings</strong> — Change your contact info, bio, and password<br>
+          <br><em style="color:var(--border)">Tip: Press Ctrl+Shift+A anywhere to open this panel.</em>
+        </div>
+      </div>
+
+      <!-- SERVICES ADMIN -->
+      <div class="admin-section" id="atab-services">
+        <div class="admin-section-title">Manage Services</div>
+        <div class="admin-section-sub">Services appear as clickable cards on the homepage with photos, pricing and process steps.</div>
+        <div class="admin-card-box">
+          <div class="admin-card-box-title">Add New Service</div>
+          <div class="admin-form-grid">
+            <div class="admin-input-group"><label>Service Name</label><input class="admin-input" id="sName" placeholder="e.g. Fiber Optic Installation"></div>
+            <div class="admin-input-group"><label>Font Awesome Icon</label><input class="admin-input" id="sIcon" placeholder="fa-ethernet"></div>
+          </div>
+          <div class="admin-input-group" style="margin-top:14px;"><label>Short Description</label><textarea class="admin-input admin-textarea" id="sDesc" placeholder="Brief description shown on card…"></textarea></div>
+          <div class="admin-form-grid" style="margin-top:14px;">
+            <div class="admin-input-group"><label>Tags (comma-separated)</label><input class="admin-input" id="sTags" placeholder="Splicing, OTDR, Fiber"></div>
+            <div class="admin-input-group"><label>Starting Price (USD)</label><input class="admin-input" id="sPrice" placeholder="150" type="number"></div>
+          </div>
+          <div class="admin-btn-row"><button class="admin-btn admin-btn-primary" onclick="addService()"><i class="fas fa-plus"></i> Add Service</button></div>
+        </div>
+        <table class="admin-table"><thead><tr><th>Service</th><th>Price From</th><th>Tags</th><th>Action</th></tr></thead><tbody id="sTbody"></tbody></table>
+      </div>
+
+      <!-- PORTFOLIO ADMIN -->
+      <div class="admin-section" id="atab-portfolio">
+        <div class="admin-section-title">Manage Portfolio</div>
+        <div class="admin-section-sub">Showcase your completed projects with descriptions and technology tags.</div>
+        <div class="admin-card-box">
+          <div class="admin-card-box-title">Add New Project</div>
+          <div class="admin-form-grid">
+            <div class="admin-input-group"><label>Project Name</label><input class="admin-input" id="pName" placeholder="5G Tower Upgrade"></div>
+            <div class="admin-input-group"><label>Type/Category</label><input class="admin-input" id="pType" placeholder="Infrastructure"></div>
+          </div>
+          <div class="admin-input-group" style="margin-top:14px;"><label>Description</label><textarea class="admin-input admin-textarea" id="pDesc" placeholder="What did you do, where, and what was the result?"></textarea></div>
+          <div class="admin-form-grid" style="margin-top:14px;">
+            <div class="admin-input-group"><label>Emoji Icon</label><input class="admin-input" id="pEmoji" placeholder="📡"></div>
+            <div class="admin-input-group"><label>Tech Used (comma-separated)</label><input class="admin-input" id="pTech" placeholder="5G NR, Nokia, CPRI"></div>
+          </div>
+          <div class="admin-btn-row"><button class="admin-btn admin-btn-primary" onclick="addProject()"><i class="fas fa-plus"></i> Add Project</button></div>
+        </div>
+        <table class="admin-table"><thead><tr><th>Project</th><th>Type</th><th>Action</th></tr></thead><tbody id="pTbody"></tbody></table>
+      </div>
+
+      <!-- MESSAGES -->
+      <div class="admin-section" id="atab-messages">
+        <div class="admin-section-title">Client Messages</div>
+        <div class="admin-section-sub">Contact form submissions from visitors to your website.</div>
+        <table class="admin-table"><thead><tr><th>Name</th><th>Email</th><th>Service</th><th>Message</th><th>Date</th></tr></thead><tbody id="mTbody"></tbody></table>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="admin-section" id="atab-skills">
+        <div class="admin-section-title">Manage Skills</div>
+        <div class="admin-section-sub">Edit the skill progress bars in your About section.</div>
+        <div class="admin-card-box">
+          <div class="admin-card-box-title">Add Skill</div>
+          <div class="admin-form-grid">
+            <div class="admin-input-group"><label>Skill Name</label><input class="admin-input" id="skName" placeholder="Fiber Optics"></div>
+            <div class="admin-input-group"><label>Level (%)</label><input class="admin-input" id="skPct" type="number" min="1" max="100" placeholder="95"></div>
+          </div>
+          <div class="admin-btn-row"><button class="admin-btn admin-btn-primary" onclick="addSkill()"><i class="fas fa-plus"></i> Add Skill</button></div>
+        </div>
+        <table class="admin-table"><thead><tr><th>Skill</th><th>Level</th><th>Action</th></tr></thead><tbody id="skTbody"></tbody></table>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="admin-section" id="atab-settings">
+        <div class="admin-section-title">Site Settings</div>
+        <div class="admin-section-sub">Update your contact info and login credentials.</div>
+        <div class="admin-card-box">
+          <div class="admin-card-box-title">Contact Information</div>
+          <div class="admin-form-grid">
+            <div class="admin-input-group"><label>Phone</label><input class="admin-input" id="stPhone" placeholder="+93 771 492 760"></div>
+            <div class="admin-input-group"><label>Email</label><input class="admin-input" id="stEmail" placeholder="shabir.salamyar@gmail.com"></div>
+          </div>
+          <div class="admin-input-group" style="margin-top:14px;"><label>Location</label><input class="admin-input" id="stLoc" placeholder="Afghanistan"></div>
+          <div class="admin-btn-row"><button class="admin-btn admin-btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save</button></div>
+        </div>
+        <div class="admin-card-box">
+          <div class="admin-card-box-title">Change Password</div>
+          <div class="admin-form-grid">
+            <div class="admin-input-group"><label>New Password</label><input class="admin-input" type="password" id="np"></div>
+            <div class="admin-input-group"><label>Confirm</label><input class="admin-input" type="password" id="cp"></div>
+          </div>
+          <div class="admin-btn-row"><button class="admin-btn admin-btn-primary" onclick="changePass()"><i class="fas fa-key"></i> Update Password</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg">Done!</span></div>
+
+<script>
+/* ════════════════════════════════════════
+   DATABASE (localStorage)
+════════════════════════════════════════ */
+const DB={
+  get(k,d){try{const v=JSON.parse(localStorage.getItem('sf2_'+k));return v??d}catch{return d}},
+  set(k,v){localStorage.setItem('sf2_'+k,JSON.stringify(v))}
+};
+
+let SERVICES=DB.get('services',[
+  {id:1,name:'Fiber Optic Installation',icon:'fa-ethernet',desc:'Full fiber infrastructure deployment — splicing, termination, OTDR testing, and certification for homes, offices, and data centers.',tags:['OTDR','Splicing','SC/LC','OM4'],price:150},
+  {id:2,name:'RF & Antenna Design',icon:'fa-broadcast-tower',desc:'Antenna design, placement optimization, and tuning for maximum coverage and minimal interference across all frequency bands.',tags:['RF','MIMO','Beamforming','Link Budget'],price:200},
+  {id:3,name:'5G / LTE Deployment',icon:'fa-signal',desc:'End-to-end 5G NR and 4G LTE RAN deployment, site commissioning, integration, and optimization.',tags:['5G NR','gNB','eNodeB','NSA/SA'],price:500},
+  {id:4,name:'Network Troubleshooting',icon:'fa-stethoscope',desc:'Rapid fault diagnosis across copper, fiber, and wireless networks. Minimizing downtime with precision testing tools.',tags:['OSP','ISP','Layer 1-3','BERT'],price:100},
+  {id:5,name:'CCTV & Security Systems',icon:'fa-video',desc:'IP camera installation, NVR/DVR setup, remote monitoring, and PoE switch configuration.',tags:['IP CCTV','NVR','PoE','H.265'],price:120},
+  {id:6,name:'Structured Cabling',icon:'fa-network-wired',desc:'Cat5e/Cat6/Cat6A structured cabling design, installation, and TIA-568 certification for any building size.',tags:['Cat6','Patch Panels','TIA-568','Fluke'],price:80},
+]);
+
+let PROJECTS=DB.get('projects',[
+  {id:1,name:'City 5G Rollout',type:'Infrastructure',desc:'Deployed 24 5G NR base stations across a metropolitan area — full RAN integration, core handoff, and drive testing.',emoji:'📡',tech:['5G NR','Nokia AirScale','CPRI','Drive Test']},
+  {id:2,name:'Hospital Fiber Backbone',type:'Enterprise',desc:'Designed and installed a 48-core OM4 fiber backbone linking 6 hospital buildings — zero packet loss, fully certified.',emoji:'🏥',tech:['OM4 Fiber','OTDR','ODF','LC/APC']},
+  {id:3,name:'ISP Network Overhaul',type:'Carrier',desc:'Upgraded legacy DSL network to GPON fiber-to-the-home — 3,000+ subscribers migrated with zero complaints.',emoji:'🌐',tech:['GPON','OLT','ONT','Splitter']},
+  {id:4,name:'Warehouse CCTV + LTE',type:'Security',desc:'32-camera IP CCTV system with dedicated LTE backup link for a 40,000 sqft logistics facility.',emoji:'🏭',tech:['IP CCTV','LTE','NVR','PoE']},
+]);
+
+let SKILLS=DB.get('skills',[
+  {name:'Fiber Optics & OTDR',pct:95},
+  {name:'RF / Wireless Design',pct:88},
+  {name:'5G / LTE Networks',pct:85},
+  {name:'Network Protocols',pct:90},
+  {name:'Structured Cabling',pct:92},
+]);
+
+let MESSAGES=DB.get('messages',[]);
+let SETTINGS=DB.get('settings',{phone:'+93 771 492 760',email:'shabir.salamyar@gmail.com',location:'Afghanistan'});
+let PASS=DB.get('pass','shabir2024');
+
+/* ════════════════════════════════════════
+   GATE
+════════════════════════════════════════ */
+let verified=false;
+function startVerify(){
+  if(verified)return;
+  const prog=document.getElementById('gateProgress');
+  const bar=document.getElementById('gateBar');
+  prog.style.display='block';
+  let w=0;
+  const iv=setInterval(()=>{
+    w+=Math.random()*7+2;
+    bar.style.width=Math.min(w,100)+'%';
+    if(w>=100){
+      clearInterval(iv);
+      verified=true;
+      const chk=document.getElementById('gateCheck');
+      chk.classList.add('verified');
+      chk.querySelector('.check-label').textContent='Verified — you\'re human ✓';
+      document.getElementById('gateBtn').style.display='block';
+    }
+  },55);
+}
+
+function enterSite(){
+  const gate=document.getElementById('gate');
+  gate.style.transition='opacity .7s';
+  gate.style.opacity='0';
+  setTimeout(()=>gate.style.display='none',700);
+  initBgCanvas();
+  initReveal();
+  initCounters();
+  renderAll();
+}
+
+/* ════════════════════════════════════════
+   NATURE WAVE + SIGNAL BACKGROUND
+   Combines flowing river-like organic waves
+   with telecom signal aesthetics
+════════════════════════════════════════ */
+function initBgCanvas(){
+  const canvas=document.getElementById('bgCanvas');
+  const ctx=canvas.getContext('2d');
+  let W,H;
+
+  function resize(){
+    W=canvas.width=window.innerWidth;
+    H=canvas.height=window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize',resize);
+
+  // River/nature wave layers
+  const waves=[
+    {amp:60,freq:0.006,speed:0.004,yBase:0.3,col:'#00e5ff',alpha:0.035,phase:0},
+    {amp:80,freq:0.004,speed:0.003,yBase:0.5,col:'#0090ff',alpha:0.028,phase:1.2},
+    {amp:50,freq:0.008,speed:0.006,yBase:0.7,col:'#00ff88',alpha:0.022,phase:2.4},
+    {amp:40,freq:0.010,speed:0.005,yBase:0.2,col:'#00e5ff',alpha:0.018,phase:0.7},
+    {amp:70,freq:0.005,speed:0.002,yBase:0.85,col:'#0060cc',alpha:0.025,phase:3.1},
+  ];
+
+  // Floating particles (like dust over water / signal noise)
+  const pts=Array.from({length:55},()=>({
+    x:Math.random()*1920,y:Math.random()*1080,
+    vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,
+    r:Math.random()*1.8+0.4,
+    a:0.04+Math.random()*.1,
+    col:Math.random()>.5?'#00e5ff':'#00ff88'
+  }));
+
+  // Signal pulse lines (horizontal dashes moving left→right)
+  const pulses=Array.from({length:6},()=>({
+    y:Math.random()*1080,x:Math.random()*1920,
+    spd:0.8+Math.random()*1.5,
+    len:60+Math.random()*120,
+    a:0.12+Math.random()*.18,
+    col:'#00e5ff'
+  }));
+
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // Subtle grid (telecom aesthetic)
+    ctx.globalAlpha=0.018;
+    ctx.strokeStyle='#00e5ff';
+    ctx.lineWidth=1;
+    for(let x=0;x<W;x+=90){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+    for(let y=0;y<H;y+=90){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+    // Nature / river waves (organic, flowing)
+    waves.forEach(w=>{
+      ctx.beginPath();
+      ctx.globalAlpha=w.alpha;
+      ctx.strokeStyle=w.col;
+      ctx.lineWidth=1.5;
+      const yBase=H*w.yBase;
+      for(let x=0;x<=W;x+=3){
+        // Compound wave for organic/river feel
+        const y=yBase
+          +Math.sin(x*w.freq+t*w.speed+w.phase)*w.amp
+          +Math.sin(x*w.freq*2.3+t*w.speed*1.7+w.phase)*w.amp*0.3
+          +Math.sin(x*w.freq*0.5+t*w.speed*0.6)*w.amp*0.15;
+        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+
+      // Filled wave body (river look)
+      ctx.beginPath();
+      ctx.globalAlpha=w.alpha*0.4;
+      ctx.fillStyle=w.col;
+      ctx.moveTo(0,H);
+      for(let x=0;x<=W;x+=3){
+        const y=yBase
+          +Math.sin(x*w.freq+t*w.speed+w.phase)*w.amp
+          +Math.sin(x*w.freq*2.3+t*w.speed*1.7+w.phase)*w.amp*0.3;
+        ctx.lineTo(x,y);
+      }
+      ctx.lineTo(W,H);
+      ctx.closePath();
+      ctx.fill();
+    });
+
+    // Signal pulses (horizontal dashes moving)
+    ctx.globalAlpha=1;
+    pulses.forEach(p=>{
+      p.x+=p.spd;
+      if(p.x>W+p.len)p.x=-p.len;
+      const grad=ctx.createLinearGradient(p.x,0,p.x+p.len,0);
+      grad.addColorStop(0,'transparent');
+      grad.addColorStop(0.5,p.col);
+      grad.addColorStop(1,'transparent');
+      ctx.beginPath();
+      ctx.strokeStyle=grad;
+      ctx.globalAlpha=p.a;
+      ctx.lineWidth=1.2;
+      ctx.moveTo(p.x,p.y);
+      ctx.lineTo(p.x+p.len,p.y);
+      ctx.stroke();
+    });
+
+    // Particles
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.col;
+      ctx.globalAlpha=p.a;
+      ctx.fill();
+    });
+
+    ctx.globalAlpha=1;
+    t+=0.015;
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+/* ════════════════════════════════════════
+   REVEAL / COUNTERS
+════════════════════════════════════════ */
+function initReveal(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+
+function initCounters(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target=parseInt(el.dataset.count);let cur=0;
+    const step=target/60;
+    const iv=setInterval(()=>{
+      cur=Math.min(cur+step,target);
+      el.textContent=Math.floor(cur)+(target===99?'%':'+');
+      if(cur>=target)clearInterval(iv);
+    },25);
+  });
+}
+
+/* ════════════════════════════════════════
+   RENDER FUNCTIONS
+════════════════════════════════════════ */
+function renderAll(){renderServices();renderSkills();renderPortfolio();applySettings()}
+
+function renderServices(){
+  const g=document.getElementById('servicesGrid');
+  g.innerHTML=SERVICES.map(s=>`
+    <div class="service-card reveal" onclick="openModal(${s.id})">
+      <div class="service-icon"><i class="fas ${s.icon}"></i></div>
+      <div class="service-name">${s.name}</div>
+      <div class="service-desc">${s.desc}</div>
+      <div class="service-tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div class="service-cta"><i class="fas fa-arrow-right"></i> View details & pricing</div>
+    </div>
+  `).join('');
+  attachReveal();
+  document.getElementById('adS').textContent=SERVICES.length;
+}
+
+function renderSkills(){
+  const c=document.getElementById('skillBars');
+  c.innerHTML=SKILLS.map(s=>`
+    <div>
+      <div class="skill-bar-label"><span>${s.name}</span><span>${s.pct}%</span></div>
+      <div class="skill-bar-track"><div class="skill-bar-fill" data-pct="${s.pct}"></div></div>
+    </div>
+  `).join('');
+  setTimeout(()=>{
+    document.querySelectorAll('.skill-bar-fill').forEach(el=>el.style.width=el.dataset.pct+'%');
+  },400);
+}
+
+function renderPortfolio(){
+  const g=document.getElementById('portfolioGrid');
+  g.innerHTML=PROJECTS.map(p=>`
+    <div class="project-card reveal">
+      <div class="project-header">
+        <span class="project-type">${p.type}</span>
+        <div class="project-status"><span class="dot"></span>Completed</div>
+      </div>
+      <div class="project-visual">${p.emoji}</div>
+      <div class="project-body">
+        <div class="project-name">${p.name}</div>
+        <div class="project-desc">${p.desc}</div>
+        <div class="project-tech">${p.tech.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>
+  `).join('');
+  attachReveal();
+  document.getElementById('adP').textContent=PROJECTS.length;
+}
+
+function applySettings(){
+  ['phone','email','location'].forEach(k=>{
+    const els=document.querySelectorAll('[data-setting='+k+']');
+    els.forEach(el=>el.textContent=SETTINGS[k]);
+  });
+}
+
+function attachReveal(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+  },{threshold:.1});
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el));
+}
+
+/* ════════════════════════════════════════
+   SERVICE MODAL — full detail, photos, pricing
+════════════════════════════════════════ */
+const SERVICE_DETAILS={
+  1:{
+    subtitle:'Residential, commercial & carrier-grade fiber deployment',
+    fullDesc:'Complete fiber optic installation from planning to certification. I handle every aspect: route planning, conduit installation, cable pulling, fusion splicing, connector termination, OTDR testing, and official certification reports. Suitable for homes, office buildings, data centers, and outside plant (OSP) work.',
+    photos:['🔌','🔬','📋'],
+    photoLabels:['Fusion Splicing','OTDR Testing','Cable Management'],
+    pricing:[
+      {tier:'Basic',amount:'$150',unit:'per run',features:['Single fiber run','Up to 100m','Termination only','Basic test report']},
+      {tier:'Standard',amount:'$350',unit:'per project',features:['Up to 4 fiber runs','OTDR certification','Fusion splicing','Full documentation'],featured:true},
+      {tier:'Enterprise',amount:'Custom',unit:'quote',features:['Unlimited runs','OSP / aerial work','Full project management','24h support SLA']}
+    ],
+    steps:[
+      {num:1,title:'Site Survey',desc:'<strong>Free assessment</strong> — I visit the site to measure distances, check conduit routes, and identify any challenges.'},
+      {num:2,title:'Cable Pull & Install',desc:'Pull fiber through conduit, tray, or overhead — handled cleanly with proper labeling at every junction.'},
+      {num:3,title:'Splicing & Termination',desc:'Fusion splicing for minimum loss (<0.05 dB), then connector termination with appropriate polish (PC, APC, UPC).'},
+      {num:4,title:'OTDR Testing & Report',desc:'Full OTDR trace on every fiber, identifying any faults, splice loss, and end-to-end performance — with a certificate.'},
+    ]
+  },
+  2:{
+    subtitle:'RF planning, antenna tuning & wireless link design',
+    fullDesc:'Complete RF engineering service: link budget calculations, frequency planning, antenna selection, tower installation coordination, and drive/walk testing. I optimize existing deployments and design new ones for maximum coverage with minimum interference.',
+    photos:['📡','📊','🗼'],
+    photoLabels:['Antenna Installation','RF Analysis','Tower Work'],
+    pricing:[
+      {tier:'Consultation',amount:'$200',unit:'per day',features:['RF survey','Coverage analysis','Recommendation report']},
+      {tier:'Design + Deploy',amount:'$600',unit:'per site',features:['Full RF design','Antenna procurement','Installation','Post-install test'],featured:true},
+      {tier:'Network-wide',amount:'Custom',unit:'quote',features:['Multi-site planning','Frequency coordination','Interference mitigation','Ongoing support']}
+    ],
+    steps:[
+      {num:1,title:'RF Survey',desc:'Walk the site to identify obstacles, measure signal levels, and map dead zones.'},
+      {num:2,title:'Link Budget & Design',desc:'Calculate path loss, Fresnel zones, and antenna gain requirements for your specific scenario.'},
+      {num:3,title:'Antenna Installation',desc:'Mount, align, and torque antennas to manufacturer specs — with proper weatherproofing and grounding.'},
+      {num:4,title:'Tune & Verify',desc:'Fine-tune azimuth and tilt, run spectrum analysis, and confirm coverage with drive/walk test data.'},
+    ]
+  },
+  3:{
+    subtitle:'End-to-end 5G NR and 4G LTE site commissioning',
+    fullDesc:'Full 5G and LTE deployment: site preparation, BBU/RRU installation, antenna alignment, integration with core network, parameter configuration, and KPI optimization. I work with Nokia, Ericsson, Huawei, and ZTE equipment.',
+    photos:['📶','🏗️','⚙️'],
+    photoLabels:['5G Radio Unit','Tower Installation','Core Integration'],
+    pricing:[
+      {tier:'Single Site',amount:'$500',unit:'per site',features:['BBU + RRU install','Antenna alignment','Commissioning','Basic KPI check']},
+      {tier:'Full Deploy',amount:'$1,200',unit:'per site',features:['Complete integration','Core handoff','Drive test','KPI optimization'],featured:true},
+      {tier:'Roll-out',amount:'Custom',unit:'multi-site',features:['Program management','All equipment vendors','Full documentation','Post-launch support']}
+    ],
+    steps:[
+      {num:1,title:'Site Preparation',desc:'Civil work coordination, power verification, backhaul readiness check, and equipment staging.'},
+      {num:2,title:'Hardware Install',desc:'Mount BBU, RRU/AAU, antennas, and all jumpers — following vendor installation manuals precisely.'},
+      {num:3,title:'Commission & Integrate',desc:'Load configuration files, align cells to core network, verify alarms, and run initial call tests.'},
+      {num:4,title:'Drive Test & Optimize',desc:'Drive or walk test to verify coverage, throughput, and handover — then tune parameters to hit KPI targets.'},
+    ]
+  },
+  4:{
+    subtitle:'Fast, precise fault detection and network repair',
+    fullDesc:'I use professional-grade test equipment (OTDR, BERT, spectrum analyzers, cable fault locators) to find and fix problems fast. Whether it is a fiber cut, RF interference, IP routing issue, or a degraded port — I diagnose it at Layer 1, 2, or 3 and deliver a root-cause analysis report.',
+    photos:['🔧','🔍','📈'],
+    photoLabels:['Fault Testing','Signal Analysis','Performance Report'],
+    pricing:[
+      {tier:'Emergency',amount:'$100',unit:'call-out fee',features:['Same-day response','On-site diagnosis','Verbal report']},
+      {tier:'Standard',amount:'$200',unit:'per visit',features:['Full layer 1-3 test','Written root-cause report','Repair included','Follow-up check'],featured:true},
+      {tier:'Contract',amount:'Custom',unit:'monthly',features:['Scheduled maintenance','Priority response','All repairs included','Monthly report']}
+    ],
+    steps:[
+      {num:1,title:'Intake & Scoping',desc:'You describe symptoms — I ask targeted questions to narrow the fault domain before arriving on-site.'},
+      {num:2,title:'Layer 1 Test',desc:'Physical inspection, OTDR run, cable tester, power meter — confirm or rule out physical layer issues.'},
+      {num:3,title:'Layer 2/3 Analysis',desc:'Check switch logs, run ping/traceroute, analyze routing tables, review VLAN config and spanning tree.'},
+      {num:4,title:'Fix & Report',desc:'Repair the fault, document root cause, and deliver a written report with recommendations to prevent recurrence.'},
+    ]
+  },
+  5:{
+    subtitle:'IP camera systems, NVR setup & remote monitoring',
+    fullDesc:'Full CCTV and security system installation: IP camera placement planning, cable runs, PoE switch configuration, NVR/DVR setup, storage calculation, remote viewing app configuration, and user training. I use Hikvision, Dahua, and Axis equipment.',
+    photos:['📷','🖥️','🔐'],
+    photoLabels:['Camera Install','NVR Setup','Remote Access'],
+    pricing:[
+      {tier:'Small (4 cam)',amount:'$120',unit:'installed',features:['4 IP cameras','PoE switch','NVR setup','Mobile app config']},
+      {tier:'Medium (8–16)',amount:'$280',unit:'installed',features:['Up to 16 cameras','Managed PoE switch','NVR + storage','Remote monitoring'],featured:true},
+      {tier:'Large Site',amount:'Custom',unit:'quote',features:['32+ cameras','Multiple NVRs','Access control integration','24/7 monitoring setup']}
+    ],
+    steps:[
+      {num:1,title:'Site Survey',desc:'Walk the property to identify camera positions for maximum coverage with minimum blind spots.'},
+      {num:2,title:'Cable & Power',desc:'Run Cat6 or coax to each camera location — concealed where possible, with proper strain relief.'},
+      {num:3,title:'Camera & NVR Setup',desc:'Mount cameras, configure IP addresses, set recording schedules, and configure motion detection zones.'},
+      {num:4,title:'Remote Access & Training',desc:'Set up secure remote viewing on your phone/PC and walk you through how to use the system.'},
+    ]
+  },
+  6:{
+    subtitle:'Cat5e / Cat6 / Cat6A installation and TIA-568 certification',
+    fullDesc:'Professional structured cabling for offices, hotels, schools, and data centers. I plan the cabling layout, install patch panels, terminate all runs, label everything clearly, and certify every cable with a Fluke tester — delivering a full certification report.',
+    photos:['🔌','🗄️','📋'],
+    photoLabels:['Cable Termination','Patch Panel','Certification'],
+    pricing:[
+      {tier:'Small Office',amount:'$80',unit:'per drop',features:['Cat6 installation','Patch panel termination','Basic labeling','Pass/fail test']},
+      {tier:'Full Office',amount:'$1,500',unit:'up to 30 drops',features:['Cat6A or Cat6','Fluke certification','Full labeling','As-built diagram'],featured:true},
+      {tier:'Data Center',amount:'Custom',unit:'quote',features:['High-density cabling','Color-coded routing','Full TIA-568 cert','Cable management']}
+    ],
+    steps:[
+      {num:1,title:'Survey & Design',desc:'Measure all cable routes, plan the patch panel layout, and produce a cabling diagram for sign-off.'},
+      {num:2,title:'Cable Pull',desc:'Pull Cat6/Cat6A from patch panel to each outlet — keeping runs below 90m, properly bundled and supported.'},
+      {num:3,title:'Termination',desc:'Terminate both ends to 110 spec, mount face plates, and label every cable consistently.'},
+      {num:4,title:'Fluke Test & Certificate',desc:'Test every pair on every run, fix any failures, then produce a Fluke certification report for each cable.'},
+    ]
+  }
+};
+
+function openModal(id){
+  const svc=SERVICES.find(s=>s.id===id);
+  const det=SERVICE_DETAILS[id]||{
+    subtitle:'Professional telecom service',
+    fullDesc:svc.desc,
+    photos:['🔧','📊','✅'],
+    photoLabels:['Work','Analysis','Result'],
+    pricing:[{tier:'Standard',amount:'From $'+svc.price,unit:'per project',features:['Professional service','Quality guaranteed','Full documentation'],featured:true}],
+    steps:[{num:1,title:'Contact',desc:'Reach out to discuss your needs.'},{num:2,title:'Survey',desc:'On-site assessment.'},{num:3,title:'Execute',desc:'Professional installation.'},{num:4,title:'Handover',desc:'Certified completion.'}]
+  };
+
+  document.getElementById('mIcon').innerHTML=`<i class="fas ${svc.icon}"></i>`;
+  document.getElementById('mTitle').textContent=svc.name;
+  document.getElementById('mSub').textContent=det.subtitle;
+
+  const photosHtml=det.photos.map((p,i)=>`
+    <div class="modal-photo">
+      <canvas id="mphoto${i}"></canvas>
+      <span style="position:relative;z-index:1;font-size:28px;">${p}</span>
+      <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.1em;text-transform:uppercase;z-index:1;">${det.photoLabels[i]}</div>
+    </div>
+  `).join('');
+
+  const pricingHtml=det.pricing.map(p=>`
+    <div class="price-card${p.featured?' featured':''}">
+      <div class="price-tier">${p.tier}</div>
+      <div class="price-amount">${p.amount}</div>
+      <div class="price-unit">${p.unit}</div>
+      <ul class="price-features">${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+    </div>
+  `).join('');
+
+  const stepsHtml=det.steps.map(s=>`
+    <div class="modal-step">
+      <div class="step-num">${s.num}</div>
+      <div class="step-text"><strong>${s.title}</strong> — ${s.desc}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('modalBody').innerHTML=`
+    <div class="modal-photos">${photosHtml}</div>
+    <div class="modal-section-title"><i class="fas fa-info-circle"></i> About This Service</div>
+    <div class="modal-desc">${det.fullDesc}</div>
+    <div class="modal-section-title"><i class="fas fa-tags"></i> Pricing</div>
+    <div class="modal-pricing">${pricingHtml}</div>
+    <div class="modal-section-title"><i class="fas fa-list-ol"></i> How It Works</div>
+    <div class="modal-steps">${stepsHtml}</div>
+    <div class="modal-cta">
+      <a href="#contact" class="btn-primary" onclick="closeModal()"><i class="fas fa-paper-plane"></i> Request This Service</a>
+      <a href="tel:+93771492760" class="btn-outline"><i class="fas fa-phone"></i> Call +93 771 492 760</a>
+    </div>
+  `;
+
+  document.getElementById('serviceModal').classList.add('open');
+  document.body.style.overflow='hidden';
+
+  // Draw animated signal on photo canvases
+  setTimeout(()=>{
+    det.photos.forEach((_,i)=>{
+      const c=document.getElementById('mphoto'+i);
+      if(!c)return;
+      const ctx=c.getContext('2d');
+      c.width=c.offsetWidth||200;c.height=c.offsetHeight||120;
+      drawPhotoAnim(ctx,c.width,c.height,i);
+    });
+  },100);
+}
+
+function drawPhotoAnim(ctx,W,H,seed){
+  let t=0;
+  const col=seed===0?'#00e5ff':seed===1?'#00ff88':'#0090ff';
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    ctx.globalAlpha=.15;
+    ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+    for(let i=0;i<3;i++){
+      ctx.beginPath();
+      ctx.strokeStyle=col;ctx.lineWidth=1.2;ctx.globalAlpha=.2+i*.05;
+      for(let x=0;x<=W;x+=2){
+        const y=H/2+Math.sin(x*.04+t+(i*.8))*18*(i+1)/3;
+        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }ctx.stroke();
+    }
+    ctx.globalAlpha=1;t+=.04;
+    requestAnimationFrame(frame);
+  }frame();
+}
+
+function closeModal(){
+  document.getElementById('serviceModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function closeModalOutside(e){if(e.target===document.getElementById('serviceModal'))closeModal()}
+
+/* ════════════════════════════════════════
+   CONTACT FORM
+════════════════════════════════════════ */
+function submitForm(){
+  const n=document.getElementById('fName').value.trim();
+  const e=document.getElementById('fEmail').value.trim();
+  const s=document.getElementById('fService').value;
+  const m=document.getElementById('fMessage').value.trim();
+  if(!n||!e||!m){toast('Please fill in all required fields.',true);return}
+  MESSAGES.push({id:Date.now(),name:n,email:e,service:s||'General',message:m,date:new Date().toLocaleDateString()});
+  DB.set('messages',MESSAGES);
+  document.getElementById('fName').value='';
+  document.getElementById('fEmail').value='';
+  document.getElementById('fService').value='';
+  document.getElementById('fMessage').value='';
+  document.getElementById('adM').textContent=MESSAGES.length;
+  renderMsgTable();
+  toast('Message sent! Shabir will reply within 24 hours. ✓');
+}
+
+/* ════════════════════════════════════════
+   NAV
+════════════════════════════════════════ */
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>40));
+function toggleMobile(){document.getElementById('mobileMenu').classList.toggle('open')}
+function closeMobile(){document.getElementById('mobileMenu').classList.remove('open')}
+
+/* ════════════════════════════════════════
+   ADMIN
+════════════════════════════════════════ */
+function openAdminLogin(){document.getElementById('adminLogin').classList.add('open')}
+function closeAdminLogin(){document.getElementById('adminLogin').classList.remove('open');document.getElementById('loginError').style.display='none'}
+
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  if(u==='admin'&&p===PASS){
+    closeAdminLogin();
+    document.getElementById('adminPanel').classList.add('open');
+    document.body.style.overflow='hidden';
+    renderAdminAll();
+    loadSettingsForm();
+  }else{
+    document.getElementById('loginError').style.display='block';
+  }
+}
+
+function closeAdmin(){
+  document.getElementById('adminPanel').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function adminTab(id,el){
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('atab-'+id).classList.add('active');
+  document.querySelectorAll('.admin-menu-item').forEach(m=>m.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function renderAdminAll(){
+  // Services table
+  document.getElementById('sTbody').innerHTML=SERVICES.map(s=>`
+    <tr>
+      <td><strong style="color:var(--white)">${s.name}</strong></td>
+      <td style="color:var(--signal)">$${s.price}</td>
+      <td>${s.tags.slice(0,2).map(t=>`<span class="badge badge-blue">${t}</span>`).join(' ')}</td>
+      <td><button class="admin-btn admin-btn-danger" style="padding:6px 12px;font-size:11px;" onclick="delService(${s.id})"><i class="fas fa-trash"></i></button></td>
+    </tr>`).join('');
+
+  // Projects table
+  document.getElementById('pTbody').innerHTML=PROJECTS.map(p=>`
+    <tr>
+      <td><strong style="color:var(--white)">${p.emoji} ${p.name}</strong></td>
+      <td><span class="badge badge-blue">${p.type}</span></td>
+      <td><button class="admin-btn admin-btn-danger" style="padding:6px 12px;font-size:11px;" onclick="delProject(${p.id})"><i class="fas fa-trash"></i></button></td>
+    </tr>`).join('');
+
+  // Skills table
+  document.getElementById('skTbody').innerHTML=SKILLS.map((s,i)=>`
+    <tr>
+      <td style="color:var(--white)">${s.name}</td>
+      <td><span class="badge badge-green">${s.pct}%</span></td>
+      <td><button class="admin-btn admin-btn-danger" style="padding:6px 12px;font-size:11px;" onclick="delSkill(${i})"><i class="fas fa-trash"></i></button></td>
+    </tr>`).join('');
+
+  renderMsgTable();
+  document.getElementById('adS').textContent=SERVICES.length;
+  document.getElementById('adP').textContent=PROJECTS.length;
+  document.getElementById('adM').textContent=MESSAGES.length;
+}
+
+function renderMsgTable(){
+  const b=document.getElementById('mTbody');
+  if(!MESSAGES.length){b.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:32px;">No messages yet.</td></tr>';return}
+  b.innerHTML=MESSAGES.map(m=>`
+    <tr>
+      <td style="color:var(--white);font-weight:600">${m.name}</td>
+      <td><a href="mailto:${m.email}" style="color:var(--signal)">${m.email}</a></td>
+      <td><span class="badge badge-blue">${m.service}</span></td>
+      <td style="max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.message}</td>
+      <td>${m.date}</td>
+    </tr>`).join('');
+}
+
+function addService(){
+  const n=document.getElementById('sName').value.trim();
+  const ic=document.getElementById('sIcon').value.trim()||'fa-wrench';
+  const d=document.getElementById('sDesc').value.trim();
+  const t=document.getElementById('sTags').value.split(',').map(x=>x.trim()).filter(Boolean);
+  const p=parseInt(document.getElementById('sPrice').value)||100;
+  if(!n||!d){toast('Fill in name and description.',true);return}
+  SERVICES.push({id:Date.now(),name:n,icon:ic,desc:d,tags:t,price:p});
+  DB.set('services',SERVICES);
+  renderServices();renderAdminAll();
+  ['sName','sDesc','sTags','sPrice'].forEach(id=>document.getElementById(id).value='');
+  toast('Service added! ✓');
+}
+
+function delService(id){
+  SERVICES=SERVICES.filter(s=>s.id!==id);
+  DB.set('services',SERVICES);
+  renderServices();renderAdminAll();
+  toast('Service removed.');
+}
+
+function addProject(){
+  const n=document.getElementById('pName').value.trim();
+  const tp=document.getElementById('pType').value.trim()||'Project';
+  const d=document.getElementById('pDesc').value.trim();
+  const e=document.getElementById('pEmoji').value.trim()||'🔧';
+  const t=document.getElementById('pTech').value.split(',').map(x=>x.trim()).filter(Boolean);
+  if(!n||!d){toast('Fill in name and description.',true);return}
+  PROJECTS.push({id:Date.now(),name:n,type:tp,desc:d,emoji:e,tech:t});
+  DB.set('projects',PROJECTS);
+  renderPortfolio();renderAdminAll();
+  ['pName','pType','pDesc','pEmoji','pTech'].forEach(id=>document.getElementById(id).value='');
+  toast('Project added! ✓');
+}
+
+function delProject(id){
+  PROJECTS=PROJECTS.filter(p=>p.id!==id);
+  DB.set('projects',PROJECTS);
+  renderPortfolio();renderAdminAll();
+  toast('Project removed.');
+}
+
+function addSkill(){
+  const n=document.getElementById('skName').value.trim();
+  const p=parseInt(document.getElementById('skPct').value);
+  if(!n||!p){toast('Enter skill and percentage.',true);return}
+  SKILLS.push({name:n,pct:Math.min(100,p)});
+  DB.set('skills',SKILLS);
+  renderSkills();renderAdminAll();
+  document.getElementById('skName').value='';
+  document.getElementById('skPct').value='';
+  toast('Skill added! ✓');
+}
+
+function delSkill(i){
+  SKILLS.splice(i,1);
+  DB.set('skills',SKILLS);
+  renderSkills();renderAdminAll();
+  toast('Skill removed.');
+}
+
+function loadSettingsForm(){
+  document.getElementById('stPhone').value=SETTINGS.phone;
+  document.getElementById('stEmail').value=SETTINGS.email;
+  document.getElementById('stLoc').value=SETTINGS.location;
+}
+
+function saveSettings(){
+  const ph=document.getElementById('stPhone').value.trim();
+  const em=document.getElementById('stEmail').value.trim();
+  const lo=document.getElementById('stLoc').value.trim();
+  if(ph)SETTINGS.phone=ph;
+  if(em)SETTINGS.email=em;
+  if(lo)SETTINGS.location=lo;
+  DB.set('settings',SETTINGS);
+  applySettings();
+  toast('Settings saved! ✓');
+}
+
+function changePass(){
+  const np=document.getElementById('np').value;
+  const cp=document.getElementById('cp').value;
+  if(!np){toast('Enter a new password.',true);return}
+  if(np!==cp){toast('Passwords do not match.',true);return}
+  PASS=np;DB.set('pass',PASS);
+  document.getElementById('np').value='';
+  document.getElementById('cp').value='';
+  toast('Password updated! ✓');
+}
+
+/* ════════════════════════════════════════
+   TOAST
+════════════════════════════════════════ */
+function toast(msg,err=false){
+  const el=document.getElementById('toast');
+  const ic=el.querySelector('i');
+  document.getElementById('toastMsg').textContent=msg;
+  ic.className=err?'fas fa-exclamation-circle':'fas fa-check-circle';
+  ic.style.color=err?'#ff6b2b':'#00ff88';
+  el.style.borderColor=err?'#ff6b2b':'#00e5ff';
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3500);
+}
+
+/* Keyboard shortcut */
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.shiftKey&&e.key==='A')openAdminLogin()});
+</script>
+</body>
+</html>
